@@ -1,3 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
+import { PrimaryButton } from './Styles';
 import React, { useEffect, useState } from 'react';
 import { QuestionList } from './QuestionList';
 import { getUnansweredQuestions, QuestionData } from './QuestionsData';
@@ -20,8 +23,18 @@ export const HomePage = () => {
   };
   return (
     <Page>
-      <h2>Unanswered Questions</h2>
-      <button onClick={handleAskQuestionClick}>Ask a question</button>
+      <div
+        css={css`
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        `}
+      >
+        <h2>Unanswered Questions</h2>
+        <PrimaryButton onClick={handleAskQuestionClick}>
+          Ask a question
+        </PrimaryButton>
+      </div>
       {loading ? <p>Loading...</p> : <QuestionList data={questions} />}
     </Page>
   );
