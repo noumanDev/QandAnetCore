@@ -2,6 +2,7 @@
 import { css } from '@emotion/react';
 import { PrimaryButton } from './Styles';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { QuestionList } from './QuestionList';
 import { getUnansweredQuestions, QuestionData } from './QuestionsData';
 import { Page } from './Page';
@@ -9,6 +10,8 @@ import { Page } from './Page';
 export const HomePage = () => {
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const doGetUnansweredQuestions = async () => {
       const unAnsweredQuestions = await getUnansweredQuestions();
@@ -19,7 +22,7 @@ export const HomePage = () => {
   }, []);
 
   const handleAskQuestionClick = () => {
-    console.log('hello');
+    navigate('ask');
   };
   return (
     <Page>

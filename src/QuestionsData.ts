@@ -56,3 +56,25 @@ export const getUnansweredQuestions = async (): Promise<QuestionData[]> => {
   await wait(5000);
   return questions.filter((a) => a.answers.length === 0);
 };
+
+export const getQuestion = async (
+  questionId: number,
+): Promise<QuestionData | null> => {
+  await wait(500);
+  const result = questions.filter(
+    (question) => question.questionId === questionId,
+  );
+
+  return result.length === 0 ? null : result[0];
+};
+
+export const searchQuestions = async (
+  criteria: string,
+): Promise<QuestionData[]> => {
+  await wait(500);
+  return questions.filter(
+    (q) =>
+      q.title.toLowerCase().indexOf(criteria.toLowerCase()) >= 0 ||
+      q.content.toLowerCase().indexOf(criteria.toLowerCase()) >= 0,
+  );
+};
