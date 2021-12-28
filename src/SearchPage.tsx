@@ -2,19 +2,27 @@
 import { css } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
 import { QuestionList } from './QuestionList';
-import { searchQuestions, QuestionData } from './QuestionsData';
+import { searchQuestions } from './QuestionsData';
 import React from 'react';
 import { Page } from './Page';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  AppState,
+  searchedQuestionsAction,
+  searchingQuestionsAction,
+} from './store';
 
 export const SearchPage = () => {
   const [searchParams] = useSearchParams();
-  const [questions, setQuestions] = React.useState<QuestionData[]>([]);
+  const questions = useSelector((state: AppState) => state.questions.searched);
   const search = searchParams.get('criteria') || '';
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     const doSearch = async (criteria: string) => {
+      dispatch(searchingQuestionsAction());
       const foundResults = await searchQuestions(criteria);
-      setQuestions(foundResults);
+      dispatch(searchedQuestionsAction(foundResults));
     };
     doSearch(search);
   }, [search]);

@@ -14,10 +14,12 @@ import {
 } from './Styles';
 import { Page } from './Page';
 import { useParams } from 'react-router-dom';
-import { getQuestion, QuestionData, postAnswer } from './QuestionsData';
-import React, { useState, useEffect } from 'react';
+import { getQuestion, postAnswer } from './QuestionsData';
+import React, { useEffect } from 'react';
 import { AnswerList } from './AnswerList';
 import { useForm } from 'react-hook-form';
+import { AppState, gettingQuestionAction, gotQuestionAction } from './store';
+import { useSelector, useDispatch } from 'react-redux';
 
 type FormData = {
   content: string;
@@ -25,7 +27,7 @@ type FormData = {
 
 export function QuestionPage() {
   const { questionId } = useParams();
-  const [question, setQuestion] = useState<QuestionData | null>(null);
+  const question = useSelector((state: AppState) => state.questions.viewing);
   const {
     register,
     formState: { errors, isSubmitting },
@@ -35,6 +37,7 @@ export function QuestionPage() {
   });
   const [successfullySubmitted, setSuccessfullySubmitted] =
     React.useState(false);
+  const dispatch = useDispatch();
 
   const submitForm = async (data: FormData) => {
     const result = await postAnswer({
@@ -48,8 +51,9 @@ export function QuestionPage() {
 
   useEffect(() => {
     const doGetQuestion = async (questionId: number) => {
+      dispatch(gettingQuestionAction());
       const foundQuestion = await getQuestion(questionId);
-      setQuestion(foundQuestion);
+      dispatch(gotQuestionAction(foundQuestion));
     };
     if (questionId) {
       doGetQuestion(Number(questionId));
